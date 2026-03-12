@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X1 GreenPulse — Whitepaper v1.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0f1a;
+            --bg-section: rgba(15, 22, 40, 0.6);
+            --green: #22c55e;
+            --cyan: #06b6d4;
+            --purple: #8b5cf6;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(255,255,255,0.06);
+            --gradient: linear-gradient(135deg, #22c55e 0%, #06b6d4 100%);
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout */
+        .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+        /* Cover */
+        .cover {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(34,197,94,0.12), transparent);
+            border-radius: 50%;
+            filter: blur(100px);
+        }
+
+        .cover::after {
+            content: '';
+            position: absolute;
+            bottom: -150px;
+            left: -150px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(6,182,212,0.1), transparent);
+            border-radius: 50%;
+            filter: blur(100px);
+        }
+
+        .cover-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            z-index: 1;
+        }
+
+        .cover-logo svg { width: 48px; height: 48px; }
+        .cover-logo span {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .cover h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            z-index: 1;
+        }
+
+        .gradient-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cover-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 32px;
+            z-index: 1;
+        }
+
+        .cover-meta {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 1;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .cover-meta span { display: flex; align-items: center; gap: 6px; }
+        .cover-meta strong { color: var(--text-secondary); }
+
+        /* Table of Contents */
+        .toc {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+        }
+
+        .toc-list {
+            list-style: none;
+            counter-reset: toc;
+        }
+
+        .toc-list li {
+            counter-increment: toc;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-list li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: color 0.2s;
+        }
+
+        .toc-list li a:hover { color: var(--green); }
+
+        .toc-list li a::before {
+            content: counter(toc, decimal-leading-zero);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--green);
+            min-width: 28px;
+        }
+
+        /* Sections */
+        .wp-section {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .wp-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .wp-section h2 .sec-num {
+            font-size: 0.85rem;
+            background: rgba(34,197,94,0.1);
+            color: var(--green);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .wp-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 32px 0 12px;
+            color: var(--cyan);
+        }
+
+        .wp-section p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .wp-section ul, .wp-section ol {
+            color: var(--text-secondary);
+            padding-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .wp-section li { margin-bottom: 8px; }
+        .wp-section strong { color: var(--text); }
+
+        /* Info Boxes */
+        .info-box {
+            background: var(--bg-section);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--green);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .info-box.cyan { border-left-color: var(--cyan); }
+        .info-box.purple { border-left-color: var(--purple); }
+
+        .info-box h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 8px;
+        }
+
+        /* Tables */
+        .wp-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 0.9rem;
+        }
+
+        .wp-table th, .wp-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .wp-table th {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            color: var(--green);
+            background: rgba(34,197,94,0.05);
+        }
+
+        .wp-table td { color: var(--text-secondary); }
+
+        /* Code blocks */
+        .code-block {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--green);
+            line-height: 1.6;
+        }
+
+        /* Diagram boxes */
+        .diagram {
+            background: var(--bg-section);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .diagram-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .diagram-node {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .diagram-node.green { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+        .diagram-node.cyan { background: rgba(6,182,212,0.15); color: var(--cyan); border: 1px solid rgba(6,182,212,0.3); }
+        .diagram-node.purple { background: rgba(139,92,246,0.15); color: var(--purple); border: 1px solid rgba(139,92,246,0.3); }
+
+        .diagram-arrow { color: var(--text-muted); font-size: 1.2rem; }
+
+        /* Footer */
+        .wp-footer {
+            padding: 48px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 640px) {
+            .diagram-flow { flex-direction: column; }
+            .diagram-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- COVER -->
+    <div class="cover">
+        <div class="cover-logo">
+            <svg viewBox="0 0 48 48" fill="none">
+                <circle cx="24" cy="24" r="21" stroke="url(#g1)" stroke-width="3"/>
+                <path d="M15 24L21 30L33 18" stroke="url(#g1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs><linearGradient id="g1" x1="0" y1="0" x2="48" y2="48">
+                    <stop stop-color="#22c55e"/><stop offset="1" stop-color="#06b6d4"/>
+                </linearGradient></defs>
+            </svg>
+            <span>X1 <span class="gradient-text">GreenPulse</span></span>
+        </div>
+        <h1>DePIN Energy Monitoring<br>& <span class="gradient-text">Carbon Credit</span> Platform</h1>
+        <p class="cover-subtitle">
+            A decentralized energy monitoring system and carbon credit NFT marketplace 
+            built on X1 EcoChain — the world's most energy-efficient Layer-1 blockchain.
+        </p>
+        <div class="cover-meta">
+            <span><strong>Version:</strong> 1.0</span>
+            <span><strong>Author:</strong> KarimKusin</span>
+            <span><strong>Wallet:</strong> 0x7172...888B</span>
+            <span><strong>Date:</strong> March 2026</span>
+            <span><strong>Network:</strong> X1 EcoChain</span>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- TABLE OF CONTENTS -->
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ol class="toc-list">
+                <li><a href="#abstract">Abstract</a></li>
+                <li><a href="#problem">Problem Statement</a></li>
+                <li><a href="#solution">Solution Overview</a></li>
+                <li><a href="#architecture">Technical Architecture</a></li>
+                <li><a href="#green-score">Green Score Algorithm</a></li>
+                <li><a href="#carbon-credits">Carbon Credit NFTs</a></li>
+                <li><a href="#ai-optimizer">AI Energy Optimizer</a></li>
+                <li><a href="#tokenomics">Tokenomics & Incentives</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+                <li><a href="#team">Team & Contact</a></li>
+            </ol>
+        </div>
+
+        <!-- 1. ABSTRACT -->
+        <section class="wp-section" id="abstract">
+            <h2><span class="sec-num">01</span> Abstract</h2>
+            <p>
+                <strong>X1 GreenPulse</strong> is a decentralized platform that brings transparency, accountability, 
+                and gamification to blockchain energy consumption. Built natively on <strong>X1 EcoChain</strong> — 
+                the world's first energy-efficient Web4 Layer-1 blockchain using only ~3 Watt-hours per node — 
+                GreenPulse provides real-time energy monitoring for validators, a scoring system for energy efficiency 
+                (Green Score), and a marketplace for trading verified Carbon Credit NFTs.
+            </p>
+            <p>
+                By combining <strong>DePIN (Decentralized Physical Infrastructure Network)</strong> monitoring 
+                with <strong>AI-powered energy optimization</strong> and <strong>on-chain carbon credit verification</strong>, 
+                GreenPulse creates a complete ecosystem that incentivizes sustainable blockchain operations while 
+                generating verifiable environmental impact data.
+            </p>
+            <div class="info-box">
+                <h4>🎯 Key Value Proposition</h4>
+                <p>GreenPulse turns X1 EcoChain's energy efficiency advantage into a measurable, tradeable, and verifiable asset — making "green blockchain" more than just a marketing claim.</p>
+            </div>
+        </section>
+
+        <!-- 2. PROBLEM STATEMENT -->
+        <section class="wp-section" id="problem">
+            <h2><span class="sec-num">02</span> Problem Statement</h2>
+            <p>The blockchain industry faces critical challenges in energy accountability:</p>
+            <ul>
+                <li><strong>No Transparency:</strong> Most blockchains cannot quantify their actual energy consumption per node or transaction</li>
+                <li><strong>Greenwashing:</strong> Claims of "energy efficiency" lack on-chain verification and auditable proof</li>
+                <li><strong>No Incentives:</strong> Validators have no financial motivation to optimize energy usage beyond basic operation</li>
+                <li><strong>Fragmented Carbon Markets:</strong> Traditional carbon credits are opaque, expensive to verify, and inaccessible to small operations</li>
+                <li><strong>Wasted Potential:</strong> Energy-efficient networks like X1 EcoChain cannot currently monetize their environmental advantage</li>
+            </ul>
+
+            <div class="info-box cyan">
+                <h4>📊 The Numbers</h4>
+                <p>Ethereum consumes approximately 600 Wh per validator. X1 EcoChain uses only 3 Wh — a <strong>99.5% reduction</strong>. Yet there is no standardized system to quantify, verify, and reward this difference.</p>
+            </div>
+        </section>
+
+        <!-- 3. SOLUTION -->
+        <section class="wp-section" id="solution">
+            <h2><span class="sec-num">03</span> Solution Overview</h2>
+            <p>GreenPulse addresses these challenges through four integrated components:</p>
+
+            <h3>🔋 1. Real-Time Energy Dashboard</h3>
+            <p>A live monitoring interface that tracks every validator's energy consumption, comparing it against other blockchain networks (Ethereum, Solana, Avalanche). Data is collected via DePIN sensor integration and stored on-chain through the GreenScoreOracle contract.</p>
+
+            <h3>🏆 2. Green Score System</h3>
+            <p>A composite scoring algorithm (0-100) that rates each validator on energy efficiency, uptime, carbon savings, and network contribution. Higher scores unlock better rewards and carbon credit minting privileges.</p>
+
+            <h3>🌿 3. Carbon Credit NFT Marketplace</h3>
+            <p>Verified energy savings are converted into ERC-721 Carbon Credit NFTs that can be traded on the marketplace. Each NFT represents a quantified amount of CO₂ offset, verified by authorized on-chain verifiers.</p>
+
+            <h3>🤖 4. AI Energy Optimizer</h3>
+            <p>An AI-powered assistant that analyzes validator performance data and provides personalized recommendations for reducing energy consumption and improving Green Scores.</p>
+
+            <div class="diagram">
+                <h4 style="margin-bottom: 20px; font-family: 'Space Grotesk', sans-serif;">System Flow</h4>
+                <div class="diagram-flow">
+                    <div class="diagram-node green">📡 DePIN Sensors</div>
+                    <span class="diagram-arrow">→</span>
+                    <div class="diagram-node cyan">📊 Green Score Oracle</div>
+                    <span class="diagram-arrow">→</span>
+                    <div class="diagram-node green">🏆 Score Calculation</div>
+                    <span class="diagram-arrow">→</span>
+                    <div class="diagram-node purple">🌿 Carbon Credit NFT Mint</div>
+                    <span class="diagram-arrow">→</span>
+                    <div class="diagram-node cyan">🏪 Marketplace</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. ARCHITECTURE -->
+        <section class="wp-section" id="architecture">
+            <h2><span class="sec-num">04</span> Technical Architecture</h2>
+
+            <h3>Smart Contract Stack</h3>
+            <table class="wp-table">
+                <thead>
+                    <tr>
+                        <th>Contract</th>
+                        <th>Purpose</th>
+                        <th>Standard</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>GreenPulseCarbonCredit.sol</strong></td>
+                        <td>Carbon Credit NFT — minting, verification, marketplace</td>
+                        <td>ERC-721</td>
+                    </tr>
+                    <tr>
+                        <td><strong>GreenScoreOracle.sol</strong></td>
+                        <td>Energy metrics reporting & Green Score calculation</td>
+                        <td>Custom Oracle</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Technology Stack</h3>
+            <table class="wp-table">
+                <thead>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Technology</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Blockchain</td><td>X1 EcoChain (EVM, PoA, ~3Wh nodes)</td></tr>
+                    <tr><td>Smart Contracts</td><td>Solidity ^0.8.20, OpenZeppelin</td></tr>
+                    <tr><td>Frontend</td><td>HTML5, CSS3, Vanilla JavaScript</td></tr>
+                    <tr><td>Data Layer</td><td>On-chain (GreenScoreOracle) + IPFS (NFT metadata)</td></tr>
+                    <tr><td>AI Engine</td><td>TensorFlow.js / GPT-4 API integration</td></tr>
+                    <tr><td>DePIN Integration</td><td>IoT sensors + authorized reporter agents</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Architecture Diagram</h3>
+            <div class="diagram">
+                <div class="diagram-flow" style="flex-direction: column; gap: 12px;">
+                    <div class="diagram-node green" style="width: 100%; max-width: 400px;">🖥️ Frontend dApp (Dashboard, Marketplace, AI Chat)</div>
+                    <span class="diagram-arrow" style="transform: rotate(90deg);">→</span>
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+                        <div class="diagram-node cyan">📋 GreenPulseCarbonCredit.sol</div>
+                        <div class="diagram-node purple">📊 GreenScoreOracle.sol</div>
+                    </div>
+                    <span class="diagram-arrow" style="transform: rotate(90deg);">→</span>
+                    <div class="diagram-node green" style="width: 100%; max-width: 400px;">⛓️ X1 EcoChain (PoA Consensus, Sub-cent gas)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. GREEN SCORE -->
+        <section class="wp-section" id="green-score">
+            <h2><span class="sec-num">05</span> Green Score Algorithm</h2>
+            <p>The Green Score is a composite metric (0-100) calculated on-chain by the <code>GreenScoreOracle</code> contract. It evaluates four dimensions of validator performance:</p>
+
+            <div class="code-block">
+Green Score = (Energy Efficiency × 0.40)
+            + (Uptime × 0.30)
+            + (Carbon Savings × 0.20)
+            + (Network Contribution × 0.10)
+            </div>
+
+            <table class="wp-table">
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Weight</th>
+                        <th>Measurement</th>
+                        <th>Scoring Logic</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>⚡ Energy Efficiency</td>
+                        <td>40%</td>
+                        <td>Watt-hours per node</td>
+                        <td>≤3Wh = 100, ≥600Wh = 0 (linear)</td>
+                    </tr>
+                    <tr>
+                        <td>⏱️ Uptime</td>
+                        <td>30%</td>
+                        <td>% availability</td>
+                        <td>Direct mapping (99.9% = 99.9)</td>
+                    </tr>
+                    <tr>
+                        <td>🌱 Carbon Savings</td>
+                        <td>20%</td>
+                        <td>tCO₂ saved vs ETH</td>
+                        <td>Ratio of savings vs Ethereum equivalent</td>
+                    </tr>
+                    <tr>
+                        <td>🔄 Network Contribution</td>
+                        <td>10%</td>
+                        <td>Blocks validated</td>
+                        <td>Logarithmic (100K+ blocks = 100)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Score Tiers</h3>
+            <table class="wp-table">
+                <thead>
+                    <tr>
+                        <th>Tier</th>
+                        <th>Score Range</th>
+                        <th>Badge</th>
+                        <th>Benefits</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>🌳 Elite Green</td><td>95-100</td><td>Diamond Leaf</td><td>Max rewards + exclusive NFT drops</td></tr>
+                    <tr><td>🌿 Advanced</td><td>85-94</td><td>Gold Leaf</td><td>High rewards + priority verification</td></tr>
+                    <tr><td>🍃 Intermediate</td><td>70-84</td><td>Silver Leaf</td><td>Standard rewards</td></tr>
+                    <tr><td>🌱 Beginner</td><td>60-69</td><td>Bronze Leaf</td><td>Basic mint access</td></tr>
+                    <tr><td>❌ Below Threshold</td><td>&lt;60</td><td>—</td><td>No minting privileges</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 6. CARBON CREDITS -->
+        <section class="wp-section" id="carbon-credits">
+            <h2><span class="sec-num">06</span> Carbon Credit NFTs</h2>
+            <p>Carbon Credit NFTs are ERC-721 tokens representing verified carbon offsets. Each NFT contains on-chain proof of the energy savings it represents.</p>
+
+            <h3>Credit Categories</h3>
+            <table class="wp-table">
+                <thead>
+                    <tr><th>Category</th><th>Description</th><th>CO₂ Range</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>🌲 Forest</td><td>Reforestation & forest preservation</td><td>5-50 tCO₂</td></tr>
+                    <tr><td>☀️ Solar</td><td>Solar energy project offsets</td><td>10-100 tCO₂</td></tr>
+                    <tr><td>💨 Wind</td><td>Wind energy project offsets</td><td>10-80 tCO₂</td></tr>
+                    <tr><td>🌊 Ocean</td><td>Ocean cleanup & marine restoration</td><td>20-200 tCO₂</td></tr>
+                    <tr><td>🔌 DePIN Node</td><td>Node energy savings vs Ethereum</td><td>1-10 tCO₂</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Lifecycle</h3>
+            <div class="diagram">
+                <div class="diagram-flow">
+                    <div class="diagram-node green">1. Mint<br><small>Validator mints credit</small></div>
+                    <span class="diagram-arrow">→</span>
+                    <div class="diagram-node cyan">2. Pending<br><small>Awaiting verification</small></div>
+                    <span class="diagram-arrow">→</span>
+                    <div class="diagram-node green">3. Verified<br><small>On-chain proof</small></div>
+                    <span class="diagram-arrow">→</span>
+                    <div class="diagram-node purple">4. Tradeable<br><small>Marketplace listing</small></div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h4>🔒 Verification Process</h4>
+                <p>Carbon credits are verified by authorized verifiers — independent entities that audit the energy data from the GreenScoreOracle. Only verified credits can be traded on the marketplace, ensuring authenticity and preventing double-counting.</p>
+            </div>
+        </section>
+
+        <!-- 7. AI OPTIMIZER -->
+        <section class="wp-section" id="ai-optimizer">
+            <h2><span class="sec-num">07</span> AI Energy Optimizer</h2>
+            <p>The GreenAI assistant provides personalized energy optimization recommendations powered by machine learning analysis of validator performance data.</p>
+
+            <h3>Capabilities</h3>
+            <ul>
+                <li><strong>Energy Analysis:</strong> Identify peak consumption patterns and anomalies</li>
+                <li><strong>Score Optimization:</strong> Actionable steps to improve Green Score</li>
+                <li><strong>Carbon Strategy:</strong> Optimal timing and sizing for carbon credit minting</li>
+                <li><strong>Hardware Recommendations:</strong> Suggest energy-efficient hardware upgrades</li>
+                <li><strong>Network Insights:</strong> Compare performance against network peers</li>
+            </ul>
+
+            <h3>AI Model Pipeline</h3>
+            <div class="diagram">
+                <div class="diagram-flow">
+                    <div class="diagram-node green">📡 On-chain Data</div>
+                    <span class="diagram-arrow">→</span>
+                    <div class="diagram-node cyan">🧠 ML Processing</div>
+                    <span class="diagram-arrow">→</span>
+                    <div class="diagram-node purple">💡 Recommendations</div>
+                    <span class="diagram-arrow">→</span>
+                    <div class="diagram-node green">📈 Score Improvement</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. TOKENOMICS -->
+        <section class="wp-section" id="tokenomics">
+            <h2><span class="sec-num">08</span> Tokenomics & Incentives</h2>
+            <p>GreenPulse operates natively on X1 EcoChain using <strong>$X1</strong> as the primary transaction and reward currency.</p>
+
+            <h3>Revenue Streams</h3>
+            <table class="wp-table">
+                <thead>
+                    <tr><th>Source</th><th>Fee</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Carbon Credit Minting</td><td>0.01 X1</td><td>Fee per NFT minted</td></tr>
+                    <tr><td>Marketplace Trading</td><td>2.5%</td><td>Commission on secondary sales</td></tr>
+                    <tr><td>Premium AI Insights</td><td>Subscription</td><td>Advanced analytics & reporting</td></tr>
+                    <tr><td>Enterprise API</td><td>Per-call</td><td>API access for ESG reporting tools</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Reward Distribution</h3>
+            <table class="wp-table">
+                <thead>
+                    <tr><th>Green Score Tier</th><th>Monthly X1 Rewards</th><th>Bonus</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>🌳 Elite (95-100)</td><td>2,500 X1</td><td>Exclusive NFT + Priority</td></tr>
+                    <tr><td>🌿 Advanced (85-94)</td><td>1,800 X1</td><td>Priority verification</td></tr>
+                    <tr><td>🍃 Intermediate (70-84)</td><td>1,200 X1</td><td>Standard</td></tr>
+                    <tr><td>🌱 Beginner (60-69)</td><td>600 X1</td><td>Basic</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 9. ROADMAP -->
+        <section class="wp-section" id="roadmap">
+            <h2><span class="sec-num">09</span> Roadmap</h2>
+
+            <h3>Phase 1: Foundation (Days 1-30)</h3>
+            <ul>
+                <li>Deploy smart contracts to X1 EcoChain Maculatus Testnet</li>
+                <li>Launch frontend dApp with energy monitoring dashboard</li>
+                <li>Integrate wallet connect (MetaMask, WalletConnect)</li>
+                <li>Deploy Green Score Oracle with initial validator data</li>
+            </ul>
+
+            <h3>Phase 2: Carbon Credits (Days 31-60)</h3>
+            <ul>
+                <li>Launch Carbon Credit NFT minting for registered validators</li>
+                <li>Deploy NFT marketplace with trading functionality</li>
+                <li>Onboard first 100 validators with Green Score profiles</li>
+                <li>Begin verification partner program</li>
+            </ul>
+
+            <h3>Phase 3: AI & Scale (Days 61-90)</h3>
+            <ul>
+                <li>Launch GreenAI optimizer with personalized recommendations</li>
+                <li>Integrate DePIN sensor data feeds</li>
+                <li>Cross-chain carbon credit bridging (X1 ↔ Ethereum)</li>
+                <li>Mobile app development begins</li>
+            </ul>
+
+            <h3>Phase 4: Mainnet & Growth (Days 91-120)</h3>
+            <ul>
+                <li>Deploy to X1 EcoChain Mainnet</li>
+                <li>Enterprise API launch for ESG reporting</li>
+                <li>Partnership with carbon offset verification bodies</li>
+                <li>Community governance model introduction</li>
+                <li>Target: 1,000+ validators, 10,000+ carbon credits traded</li>
+            </ul>
+        </section>
+
+        <!-- 10. TEAM -->
+        <section class="wp-section" id="team">
+            <h2><span class="sec-num">10</span> Team & Contact</h2>
+
+            <table class="wp-table">
+                <tbody>
+                    <tr><td><strong>Founder / Builder</strong></td><td>KarimKusin</td></tr>
+                    <tr><td><strong>Wallet</strong></td><td>0x7172...888B</td></tr>
+                    <tr><td><strong>Email</strong></td><td>karimkusin@gmail.com</td></tr>
+                    <tr><td><strong>Network</strong></td><td>X1 EcoChain (Maculatus Testnet)</td></tr>
+                    <tr><td><strong>GitHub</strong></td><td>github.com/karimkusin/x1-greenpulse</td></tr>
+                    <tr><td><strong>Grant Application</strong></td><td><a href="https://grant.x1ecochain.com" style="color: var(--green);">grant.x1ecochain.com</a></td></tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h4>📬 Contact</h4>
+                <p>For inquiries, partnerships, or grant-related questions, reach out at <strong>karimkusin@gmail.com</strong>.</p>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <div class="wp-footer">
+            <p>© 2026 X1 GreenPulse by KarimKusin. Built on X1 EcoChain.</p>
+            <p style="margin-top: 8px;">This whitepaper is a living document and will be updated as the project evolves.</p>
+        </div>
+
+    </div>
+</body>
+</html>
