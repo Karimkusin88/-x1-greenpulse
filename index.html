@@ -40,10 +40,10 @@
             </div>
             <div class="nav-links">
                 <a href="#dashboard" class="nav-link active">Dashboard</a>
-                <a href="#validators" class="nav-link">Validators</a>
-                <a href="#marketplace" class="nav-link">Marketplace</a>
-                <a href="#ai-optimizer" class="nav-link">AI Optimizer</a>
-                <a href="#leaderboard" class="nav-link">Leaderboard</a>
+                <a href="#checkin" class="nav-link">Check-in</a>
+                <a href="#marketplace" class="nav-link">NFTs</a>
+                <a href="#swap" class="nav-link">Swap</a>
+                <a href="#faucet" class="nav-link">Faucet</a>
             </div>
             <button class="btn-connect" id="connectWallet">
                 <span class="btn-pulse"></span>
@@ -71,17 +71,11 @@
                 earn Green Scores, and trade Carbon Credit NFTs — all on the world's most energy-efficient L1.
             </p>
             <div class="hero-actions">
-                <button class="btn btn-primary" onclick="scrollToSection('dashboard')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                    </svg>
-                    Launch Dashboard
+                <button class="btn btn-primary" onclick="scrollToSection('checkin')">
+                    ✅ Daily Check-in
                 </button>
                 <button class="btn btn-secondary" onclick="scrollToSection('marketplace')">
-                    Explore Marketplace
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
+                    Explore Marketplace →
                 </button>
             </div>
             <div class="hero-stats">
@@ -96,13 +90,13 @@
                 </div>
                 <div class="stat-divider"></div>
                 <div class="hero-stat">
-                    <span class="stat-value" data-count="12847">0</span>
-                    <span class="stat-label">Active Nodes</span>
+                    <span class="stat-value" data-stat="total-addresses">56M</span>
+                    <span class="stat-label">Total Addresses</span>
                 </div>
                 <div class="stat-divider"></div>
                 <div class="hero-stat">
-                    <span class="stat-value" data-count="2451">0</span>
-                    <span class="stat-label">Carbon Credits Minted</span>
+                    <span class="stat-value" data-stat="total-tx-hero">84.5M</span>
+                    <span class="stat-label">Transactions</span>
                 </div>
             </div>
         </div>
@@ -134,116 +128,94 @@
         </div>
     </section>
 
-    <!-- Live Dashboard Section -->
-    <section class="section" id="dashboard">
+    <!-- ===== DAILY CHECK-IN ===== -->
+    <section class="section" id="checkin">
         <div class="section-header">
-            <div class="section-badge">📊 Live Dashboard</div>
-            <h2 class="section-title">Real-Time <span class="gradient-text">Energy Monitoring</span></h2>
-            <p class="section-desc">Track energy consumption across the X1 EcoChain network compared to other blockchains.</p>
+            <div class="section-badge">✅ Daily Check-in</div>
+            <h2 class="section-title">Earn Points with <span class="gradient-text">Daily Activity</span></h2>
+            <p class="section-desc">Check in daily to earn Green Points and create real on-chain transactions on X1 EcoChain.</p>
         </div>
 
-        <div class="dashboard-grid">
-            <!-- Energy Comparison Card -->
-            <div class="card card-large">
-                <div class="card-header">
-                    <h3>⚡ Energy Comparison</h3>
-                    <div class="card-badge live">
-                        <span class="live-dot"></span> Live
+        <div class="checkin-container">
+            <div class="checkin-main card">
+                <div class="checkin-header">
+                    <div class="streak-display">
+                        <span class="streak-fire">🔥</span>
+                        <span class="streak-count" id="streakCount">0</span>
+                        <span class="streak-label">Day Streak</span>
+                    </div>
+                    <div class="checkin-points">
+                        <span class="points-value" id="totalPoints">0</span>
+                        <span class="points-label">Green Points</span>
                     </div>
                 </div>
-                <div class="energy-bars">
-                    <div class="energy-bar-item">
-                        <div class="bar-info">
-                            <span class="chain-name">
-                                <span class="chain-icon x1">X1</span> X1 EcoChain
-                            </span>
-                            <span class="bar-value">3 Wh</span>
-                        </div>
-                        <div class="bar-track">
-                            <div class="bar-fill x1-fill" style="--width: 0.5%">
-                                <span class="bar-glow"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="energy-bar-item">
-                        <div class="bar-info">
-                            <span class="chain-name">
-                                <span class="chain-icon sol">S</span> Solana
-                            </span>
-                            <span class="bar-value">170 Wh</span>
-                        </div>
-                        <div class="bar-track">
-                            <div class="bar-fill sol-fill" style="--width: 28%"></div>
-                        </div>
-                    </div>
-                    <div class="energy-bar-item">
-                        <div class="bar-info">
-                            <span class="chain-name">
-                                <span class="chain-icon avax">A</span> Avalanche
-                            </span>
-                            <span class="bar-value">350 Wh</span>
-                        </div>
-                        <div class="bar-track">
-                            <div class="bar-fill avax-fill" style="--width: 58%"></div>
-                        </div>
-                    </div>
-                    <div class="energy-bar-item">
-                        <div class="bar-info">
-                            <span class="chain-name">
-                                <span class="chain-icon eth">E</span> Ethereum
-                            </span>
-                            <span class="bar-value">600 Wh</span>
-                        </div>
-                        <div class="bar-track">
-                            <div class="bar-fill eth-fill" style="--width: 100%"></div>
-                        </div>
-                    </div>
+                <button class="checkin-btn" id="checkinBtn" onclick="dailyCheckIn()">
+                    <span class="checkin-icon">✅</span>
+                    <span class="checkin-text">Check In Now</span>
+                    <span class="checkin-sub">Creates a real TX on X1 Explorer</span>
+                </button>
+                <div class="checkin-status" id="checkinStatus"></div>
+                <div class="checkin-history" id="checkinHistory">
+                    <h4>Recent Check-ins</h4>
+                    <div id="checkinTxList"></div>
                 </div>
             </div>
 
-            <!-- Network Stats Cards (REAL from Blockscout API) -->
-            <div class="card stat-card glow-green">
-                <div class="stat-icon green">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                    </svg>
+            <div class="checkin-side">
+                <div class="card side-card">
+                    <div class="side-icon">🎯</div>
+                    <h4>+10 Points</h4>
+                    <p>Per daily check-in transaction</p>
                 </div>
+                <div class="card side-card">
+                    <div class="side-icon">⛽</div>
+                    <h4>~0.000021 X1T</h4>
+                    <p>Gas cost per check-in</p>
+                </div>
+                <div class="card side-card">
+                    <div class="side-icon">📊</div>
+                    <h4>On-Chain TX</h4>
+                    <p>Every check-in visible on explorer</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== DASHBOARD ===== -->
+    <section class="section" id="dashboard">
+        <div class="section-header">
+            <div class="section-badge">📊 Live Dashboard</div>
+            <h2 class="section-title">Real-Time <span class="gradient-text">Network Stats</span></h2>
+            <p class="section-desc">Live data from X1 EcoChain Maculatus Testnet Blockscout Explorer.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card stat-card glow-green">
+                <div class="stat-icon green">⚡</div>
                 <div class="stat-info">
                     <span class="stat-number" data-stat="total-tx">84.5M</span>
                 </div>
                 <span class="stat-title">Total Transactions</span>
                 <span class="stat-change positive">🔴 Live from Explorer</span>
             </div>
-
             <div class="card stat-card glow-cyan">
-                <div class="stat-icon cyan">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M12 6v6l4 2"/>
-                    </svg>
-                </div>
+                <div class="stat-icon cyan">⏱️</div>
                 <div class="stat-info">
                     <span class="stat-number" data-stat="block-time">3.0</span>
                     <span class="stat-unit-sm">s</span>
                 </div>
                 <span class="stat-title">Avg Block Time</span>
-                <span class="stat-change positive">🔴 Live from Explorer</span>
+                <span class="stat-change positive">🔴 Live</span>
             </div>
-
             <div class="card stat-card glow-purple">
-                <div class="stat-icon purple">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
-                </div>
+                <div class="stat-icon purple">📈</div>
                 <div class="stat-info">
                     <span class="stat-number" data-stat="tx-today">554K</span>
                 </div>
                 <span class="stat-title">Transactions Today</span>
-                <span class="stat-change positive">🔴 Live from Explorer</span>
+                <span class="stat-change positive">🔴 Live</span>
             </div>
 
-            <!-- Live Energy Chart -->
             <div class="card card-wide">
                 <div class="card-header">
                     <h3>📈 Network Energy Usage (24h)</h3>
@@ -260,98 +232,7 @@
         </div>
     </section>
 
-    <!-- Validators Section -->
-    <section class="section" id="validators">
-        <div class="section-header">
-            <div class="section-badge">🌿 Green Validators</div>
-            <h2 class="section-title">Validator <span class="gradient-text">Green Score</span></h2>
-            <p class="section-desc">Each X1 validator is scored based on energy efficiency, uptime, and carbon footprint.</p>
-        </div>
-
-        <div class="validators-grid">
-            <div class="validator-card" data-score="98">
-                <div class="validator-rank">#1</div>
-                <div class="validator-avatar green-tier">🌳</div>
-                <h4>EcoNode Alpha</h4>
-                <p class="validator-addr">0x7a3d...f82e</p>
-                <div class="green-score-ring">
-                    <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(34,197,94,0.15)" stroke-width="6"/>
-                        <circle cx="50" cy="50" r="42" fill="none" stroke="#22c55e" stroke-width="6" 
-                            stroke-dasharray="263.9" stroke-dashoffset="5.3" stroke-linecap="round" class="score-ring"/>
-                    </svg>
-                    <span class="score-value">98</span>
-                </div>
-                <div class="validator-stats">
-                    <div><span>⚡</span> 2.8 Wh</div>
-                    <div><span>⏱️</span> 99.9%</div>
-                    <div><span>🌱</span> 0.001 tCO₂</div>
-                </div>
-            </div>
-
-            <div class="validator-card" data-score="95">
-                <div class="validator-rank">#2</div>
-                <div class="validator-avatar green-tier">🌿</div>
-                <h4>GreenLeaf Node</h4>
-                <p class="validator-addr">0x4b2c...a91d</p>
-                <div class="green-score-ring">
-                    <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(34,197,94,0.15)" stroke-width="6"/>
-                        <circle cx="50" cy="50" r="42" fill="none" stroke="#22c55e" stroke-width="6"
-                            stroke-dasharray="263.9" stroke-dashoffset="13.2" stroke-linecap="round" class="score-ring"/>
-                    </svg>
-                    <span class="score-value">95</span>
-                </div>
-                <div class="validator-stats">
-                    <div><span>⚡</span> 2.9 Wh</div>
-                    <div><span>⏱️</span> 99.7%</div>
-                    <div><span>🌱</span> 0.002 tCO₂</div>
-                </div>
-            </div>
-
-            <div class="validator-card" data-score="92">
-                <div class="validator-rank">#3</div>
-                <div class="validator-avatar cyan-tier">🍃</div>
-                <h4>SolarValidator</h4>
-                <p class="validator-addr">0x9e1f...c73b</p>
-                <div class="green-score-ring">
-                    <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(6,182,212,0.15)" stroke-width="6"/>
-                        <circle cx="50" cy="50" r="42" fill="none" stroke="#06b6d4" stroke-width="6"
-                            stroke-dasharray="263.9" stroke-dashoffset="21.1" stroke-linecap="round" class="score-ring"/>
-                    </svg>
-                    <span class="score-value">92</span>
-                </div>
-                <div class="validator-stats">
-                    <div><span>⚡</span> 3.1 Wh</div>
-                    <div><span>⏱️</span> 99.5%</div>
-                    <div><span>🌱</span> 0.003 tCO₂</div>
-                </div>
-            </div>
-
-            <div class="validator-card" data-score="89">
-                <div class="validator-rank">#4</div>
-                <div class="validator-avatar cyan-tier">🌱</div>
-                <h4>WindPower Node</h4>
-                <p class="validator-addr">0x2d8a...b45f</p>
-                <div class="green-score-ring">
-                    <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(6,182,212,0.15)" stroke-width="6"/>
-                        <circle cx="50" cy="50" r="42" fill="none" stroke="#06b6d4" stroke-width="6"
-                            stroke-dasharray="263.9" stroke-dashoffset="29" stroke-linecap="round" class="score-ring"/>
-                    </svg>
-                    <span class="score-value">89</span>
-                </div>
-                <div class="validator-stats">
-                    <div><span>⚡</span> 3.3 Wh</div>
-                    <div><span>⏱️</span> 99.2%</div>
-                    <div><span>🌱</span> 0.004 tCO₂</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Carbon Credit Marketplace -->
+    <!-- ===== CARBON CREDIT NFT MARKETPLACE ===== -->
     <section class="section" id="marketplace">
         <div class="section-header">
             <div class="section-badge">🏪 Marketplace</div>
@@ -361,88 +242,45 @@
 
         <div class="marketplace-grid">
             <div class="nft-card">
-                <div class="nft-image nft-forest">
-                    <div class="nft-badge">🌲 Forest</div>
-                    <div class="nft-overlay">
-                        <span class="nft-co2">-10 tCO₂</span>
-                    </div>
-                </div>
+                <div class="nft-image nft-forest"><div class="nft-badge">🌲 Forest</div><div class="nft-overlay"><span class="nft-co2">-10 tCO₂</span></div></div>
                 <div class="nft-info">
                     <h4>Amazon Reforestation Credit</h4>
-                    <p>Verified carbon offset from Amazon rainforest preservation project.</p>
+                    <p>Verified carbon offset from Amazon rainforest preservation.</p>
                     <div class="nft-meta">
-                        <div class="nft-price">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
-                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                            </svg>
-                            <span>250 X1</span>
-                        </div>
+                        <div class="nft-price"><span>0.01 X1T</span></div>
                         <button class="btn-mint">Mint NFT</button>
                     </div>
                 </div>
             </div>
-
             <div class="nft-card">
-                <div class="nft-image nft-solar">
-                    <div class="nft-badge">☀️ Solar</div>
-                    <div class="nft-overlay">
-                        <span class="nft-co2">-25 tCO₂</span>
-                    </div>
-                </div>
+                <div class="nft-image nft-solar"><div class="nft-badge">☀️ Solar</div><div class="nft-overlay"><span class="nft-co2">-25 tCO₂</span></div></div>
                 <div class="nft-info">
                     <h4>Solar Farm Initiative Credit</h4>
                     <p>Carbon offset from Southeast Asia solar energy installations.</p>
                     <div class="nft-meta">
-                        <div class="nft-price">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
-                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                            </svg>
-                            <span>580 X1</span>
-                        </div>
+                        <div class="nft-price"><span>0.01 X1T</span></div>
                         <button class="btn-mint">Mint NFT</button>
                     </div>
                 </div>
             </div>
-
             <div class="nft-card">
-                <div class="nft-image nft-wind">
-                    <div class="nft-badge">💨 Wind</div>
-                    <div class="nft-overlay">
-                        <span class="nft-co2">-15 tCO₂</span>
-                    </div>
-                </div>
+                <div class="nft-image nft-wind"><div class="nft-badge">💨 Wind</div><div class="nft-overlay"><span class="nft-co2">-15 tCO₂</span></div></div>
                 <div class="nft-info">
                     <h4>Wind Energy Offset Credit</h4>
-                    <p>Verified from offshore wind farm project in Northern Europe.</p>
+                    <p>Verified from offshore wind farm in Northern Europe.</p>
                     <div class="nft-meta">
-                        <div class="nft-price">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
-                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                            </svg>
-                            <span>380 X1</span>
-                        </div>
+                        <div class="nft-price"><span>0.01 X1T</span></div>
                         <button class="btn-mint">Mint NFT</button>
                     </div>
                 </div>
             </div>
-
             <div class="nft-card">
-                <div class="nft-image nft-ocean">
-                    <div class="nft-badge">🌊 Ocean</div>
-                    <div class="nft-overlay">
-                        <span class="nft-co2">-50 tCO₂</span>
-                    </div>
-                </div>
+                <div class="nft-image nft-ocean"><div class="nft-badge">🌊 Ocean</div><div class="nft-overlay"><span class="nft-co2">-50 tCO₂</span></div></div>
                 <div class="nft-info">
                     <h4>Ocean Cleanup Carbon Credit</h4>
                     <p>Supporting ocean plastic cleanup and marine ecosystem restoration.</p>
                     <div class="nft-meta">
-                        <div class="nft-price">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
-                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                            </svg>
-                            <span>1,200 X1</span>
-                        </div>
+                        <div class="nft-price"><span>0.01 X1T</span></div>
                         <button class="btn-mint">Mint NFT</button>
                     </div>
                 </div>
@@ -450,7 +288,109 @@
         </div>
     </section>
 
-    <!-- AI Optimizer Section -->
+    <!-- ===== SWAP / DEX ===== -->
+    <section class="section" id="swap">
+        <div class="section-header">
+            <div class="section-badge">🔄 Swap</div>
+            <h2 class="section-title">Token <span class="gradient-text">Swap</span></h2>
+            <p class="section-desc">Swap tokens on X1 EcoChain via EcoDEX integration.</p>
+        </div>
+
+        <div class="swap-container">
+            <div class="swap-box card">
+                <div class="swap-header">
+                    <h3>🔄 Swap Tokens</h3>
+                    <span class="powered-by">Powered by EcoDEX</span>
+                </div>
+                <div class="swap-input-group">
+                    <label>From</label>
+                    <div class="swap-input-row">
+                        <input type="number" class="swap-input" placeholder="0.0" id="swapFromAmount">
+                        <div class="swap-token-select">X1T</div>
+                    </div>
+                    <span class="swap-balance" id="swapBalance">Balance: --</span>
+                </div>
+                <div class="swap-arrow">
+                    <button class="swap-arrow-btn">↕</button>
+                </div>
+                <div class="swap-input-group">
+                    <label>To</label>
+                    <div class="swap-input-row">
+                        <input type="number" class="swap-input" placeholder="0.0" id="swapToAmount" readonly>
+                        <div class="swap-token-select">WECO</div>
+                    </div>
+                </div>
+                <a href="https://ecodex.one" target="_blank" class="btn btn-primary swap-btn">
+                    Open EcoDEX to Swap →
+                </a>
+                <p class="swap-note">Swap executes on EcoDEX — the official X1 EcoChain DEX</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FAUCET ===== -->
+    <section class="section" id="faucet">
+        <div class="section-header">
+            <div class="section-badge">🚰 Faucet</div>
+            <h2 class="section-title">Get Free <span class="gradient-text">Testnet X1T</span></h2>
+            <p class="section-desc">Claim free X1T tokens from the official faucet to start testing on X1 EcoChain.</p>
+        </div>
+
+        <div class="faucet-container">
+            <div class="faucet-box card">
+                <div class="faucet-icon">🚰</div>
+                <h3>X1 Maculatus Testnet Faucet</h3>
+                <p>Get <strong>100 X1T</strong> every 24 hours for free. Use it to test dApps, mint NFTs, and do daily check-ins.</p>
+                <div class="faucet-address" id="faucetAddress">
+                    Connect wallet to auto-fill address
+                </div>
+                <a href="https://testnet.x1ecochain.com/" target="_blank" class="btn btn-primary faucet-btn">
+                    🚰 Claim from Official Faucet
+                </a>
+                <div class="faucet-info">
+                    <div class="faucet-info-item">
+                        <span>💰</span> <strong>100 X1T</strong> per claim
+                    </div>
+                    <div class="faucet-info-item">
+                        <span>⏰</span> Every <strong>24 hours</strong>
+                    </div>
+                    <div class="faucet-info-item">
+                        <span>⛽</span> Free, no gas required
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TIP / DONATE ===== -->
+    <section class="section" id="tip">
+        <div class="section-header">
+            <div class="section-badge">💚 Support</div>
+            <h2 class="section-title">Tip the <span class="gradient-text">Builder</span></h2>
+            <p class="section-desc">Support X1 GreenPulse development by sending a tip. Every tip creates a real on-chain transaction!</p>
+        </div>
+
+        <div class="tip-container">
+            <div class="tip-box card">
+                <div class="tip-amounts">
+                    <button class="tip-amount-btn" data-amount="0.1" onclick="setTipAmount(0.1)">0.1 X1T</button>
+                    <button class="tip-amount-btn" data-amount="1" onclick="setTipAmount(1)">1 X1T</button>
+                    <button class="tip-amount-btn active" data-amount="5" onclick="setTipAmount(5)">5 X1T</button>
+                    <button class="tip-amount-btn" data-amount="10" onclick="setTipAmount(10)">10 X1T</button>
+                </div>
+                <div class="tip-custom">
+                    <input type="number" class="tip-input" id="tipAmount" value="5" min="0.001" step="0.1" placeholder="Custom amount">
+                    <span class="tip-currency">X1T</span>
+                </div>
+                <button class="btn btn-primary tip-send-btn" id="tipBtn" onclick="sendTip()">
+                    💚 Send Tip (Real TX)
+                </button>
+                <p class="tip-note">Tip goes to: <code>0x71723715478b344164e992b49ae1fCEb6467888B</code></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== AI OPTIMIZER ===== -->
     <section class="section" id="ai-optimizer">
         <div class="section-header">
             <div class="section-badge">🤖 AI Optimizer</div>
@@ -464,14 +404,13 @@
                     <div class="chat-msg bot">
                         <div class="msg-avatar">🤖</div>
                         <div class="msg-content">
-                            <p>Hello! I'm <strong>GreenAI</strong>, your energy optimization assistant. I can help you:</p>
+                            <p>Hello! I'm <strong>GreenAI</strong>, your energy optimization assistant. Ask me about:</p>
                             <ul>
-                                <li>🔋 Optimize your node's energy usage</li>
-                                <li>📊 Analyze your Green Score trends</li>
-                                <li>🌿 Suggest carbon offset strategies</li>
-                                <li>💡 Recommend hardware improvements</li>
+                                <li>🔋 Node energy optimization</li>
+                                <li>📊 Green Score analysis</li>
+                                <li>🌿 Carbon offset strategies</li>
+                                <li>💰 Your X1T balance & transactions</li>
                             </ul>
-                            <p>How can I help you today?</p>
                         </div>
                     </div>
                 </div>
@@ -484,134 +423,63 @@
                     </button>
                 </div>
             </div>
-            <div class="ai-insights">
-                <div class="insight-card">
-                    <div class="insight-icon">💡</div>
-                    <h4>Quick Insight</h4>
-                    <p>Your node is consuming <strong>12% more</strong> energy during peak hours (14:00-18:00). Consider scheduling heavy operations outside this window.</p>
-                </div>
-                <div class="insight-card">
-                    <div class="insight-icon">🎯</div>
-                    <h4>Optimization Score</h4>
-                    <div class="optimization-score">
-                        <div class="opt-bar">
-                            <div class="opt-fill" style="--width: 78%"></div>
-                        </div>
-                        <span>78/100</span>
-                    </div>
-                    <p>Room for <strong>22%</strong> improvement. Apply recommended settings to boost efficiency.</p>
-                </div>
-                <div class="insight-card">
-                    <div class="insight-icon">🏆</div>
-                    <h4>Achievement Unlocked</h4>
-                    <p><strong>"Green Pioneer"</strong> — Running below 3Wh for 30 consecutive days!</p>
-                </div>
-            </div>
         </div>
     </section>
 
-    <!-- Leaderboard Section -->
-    <section class="section" id="leaderboard">
-        <div class="section-header">
-            <div class="section-badge">🏆 Leaderboard</div>
-            <h2 class="section-title">Greenest <span class="gradient-text">Validators</span></h2>
-            <p class="section-desc">Top performing validators ranked by Green Score, energy efficiency, and carbon offset.</p>
-        </div>
-
-        <div class="leaderboard-container">
-            <div class="leaderboard-header-row">
-                <span>Rank</span>
-                <span>Validator</span>
-                <span>Green Score</span>
-                <span>Energy</span>
-                <span>Carbon Offset</span>
-                <span>Rewards</span>
-            </div>
-            <div class="leaderboard-row gold">
-                <span class="lb-rank">🥇</span>
-                <span class="lb-validator">
-                    <span class="lb-avatar">🌳</span>
-                    EcoNode Alpha
-                    <span class="lb-addr">0x7a3d...f82e</span>
-                </span>
-                <span class="lb-score"><span class="score-pill green">98</span></span>
-                <span class="lb-energy">2.8 Wh</span>
-                <span class="lb-carbon">-142 tCO₂</span>
-                <span class="lb-reward">+2,450 X1</span>
-            </div>
-            <div class="leaderboard-row silver">
-                <span class="lb-rank">🥈</span>
-                <span class="lb-validator">
-                    <span class="lb-avatar">🌿</span>
-                    GreenLeaf Node
-                    <span class="lb-addr">0x4b2c...a91d</span>
-                </span>
-                <span class="lb-score"><span class="score-pill green">95</span></span>
-                <span class="lb-energy">2.9 Wh</span>
-                <span class="lb-carbon">-128 tCO₂</span>
-                <span class="lb-reward">+2,180 X1</span>
-            </div>
-            <div class="leaderboard-row bronze">
-                <span class="lb-rank">🥉</span>
-                <span class="lb-validator">
-                    <span class="lb-avatar">🍃</span>
-                    SolarValidator
-                    <span class="lb-addr">0x9e1f...c73b</span>
-                </span>
-                <span class="lb-score"><span class="score-pill cyan">92</span></span>
-                <span class="lb-energy">3.1 Wh</span>
-                <span class="lb-carbon">-105 tCO₂</span>
-                <span class="lb-reward">+1,920 X1</span>
-            </div>
-            <div class="leaderboard-row">
-                <span class="lb-rank">4</span>
-                <span class="lb-validator">
-                    <span class="lb-avatar">🌱</span>
-                    WindPower Node
-                    <span class="lb-addr">0x2d8a...b45f</span>
-                </span>
-                <span class="lb-score"><span class="score-pill cyan">89</span></span>
-                <span class="lb-energy">3.3 Wh</span>
-                <span class="lb-carbon">-94 tCO₂</span>
-                <span class="lb-reward">+1,650 X1</span>
-            </div>
-            <div class="leaderboard-row">
-                <span class="lb-rank">5</span>
-                <span class="lb-validator">
-                    <span class="lb-avatar">🔋</span>
-                    BatteryNode X
-                    <span class="lb-addr">0x5f3e...d27c</span>
-                </span>
-                <span class="lb-score"><span class="score-pill">86</span></span>
-                <span class="lb-energy">3.4 Wh</span>
-                <span class="lb-carbon">-82 tCO₂</span>
-                <span class="lb-reward">+1,400 X1</span>
-            </div>
-            <div class="leaderboard-row highlight">
-                <span class="lb-rank">680,301</span>
-                <span class="lb-validator">
-                    <span class="lb-avatar">⭐</span>
-                    KarimKusin (You)
-                    <span class="lb-addr">0x7172...888B</span>
-                </span>
-                <span class="lb-score"><span class="score-pill">—</span></span>
-                <span class="lb-energy">—</span>
-                <span class="lb-carbon">—</span>
-                <span class="lb-reward">Setup Node</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Transaction History Section -->
+    <!-- ===== TX HISTORY ===== -->
     <section class="section" id="tx-history">
         <div class="section-header">
             <div class="section-badge">📋 Transaction History</div>
             <h2 class="section-title">Your <span class="gradient-text">On-Chain Activity</span></h2>
-            <p class="section-desc">Real transactions from X1 EcoChain Maculatus Testnet explorer.</p>
+            <p class="section-desc">Real transactions from X1 EcoChain Maculatus Testnet.</p>
         </div>
         <div class="tx-list-container card">
             <div id="txHistory">
-                <p class="no-tx">Connect your wallet to view real transaction history</p>
+                <p class="no-tx">Connect wallet to view real transaction history</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== BUILT BY / OFFICIAL ===== -->
+    <section class="section" id="built-by">
+        <div class="section-header">
+            <div class="section-badge">🏗️ Official</div>
+            <h2 class="section-title">Built by <span class="gradient-text">KarimKusin</span></h2>
+            <p class="section-desc">X1 GreenPulse is an official project for the X1 EcoChain Grant Program.</p>
+        </div>
+
+        <div class="builder-container">
+            <div class="builder-card card">
+                <div class="builder-avatar">👨‍💻</div>
+                <h3>KarimKusin</h3>
+                <p class="builder-role">Founder & Developer</p>
+                <div class="builder-wallet">
+                    <code>0x71723715478b344164e992b49ae1fCEb6467888B</code>
+                </div>
+                <div class="builder-links">
+                    <a href="https://github.com/Karimkusin88" target="_blank" class="builder-link github">
+                        <span>🐙</span> GitHub @Karimkusin88
+                    </a>
+                    <a href="https://x.com/karimkusin" target="_blank" class="builder-link twitter">
+                        <span>𝕏</span> @karimkusin
+                    </a>
+                    <a href="mailto:karimkusin@gmail.com" class="builder-link email">
+                        <span>📧</span> karimkusin@gmail.com
+                    </a>
+                    <a href="https://github.com/Karimkusin88/-x1-greenpulse" target="_blank" class="builder-link repo">
+                        <span>📦</span> Source Code
+                    </a>
+                </div>
+            </div>
+            <div class="project-info card">
+                <h4>📋 Project Info</h4>
+                <div class="project-detail"><span>Network</span><strong>X1 EcoChain (Maculatus Testnet)</strong></div>
+                <div class="project-detail"><span>Chain ID</span><strong>204005</strong></div>
+                <div class="project-detail"><span>RPC</span><strong>x1-testnet.xen.network</strong></div>
+                <div class="project-detail"><span>Explorer</span><a href="https://maculatus-scan.x1eco.com" target="_blank">maculatus-scan.x1eco.com</a></div>
+                <div class="project-detail"><span>Grant</span><a href="https://grant.x1ecochain.com" target="_blank">X1 EcoChain $5M Grant</a></div>
+                <div class="project-detail"><span>Whitepaper</span><a href="whitepaper.html" target="_blank">Read Whitepaper</a></div>
+                <div class="project-detail"><span>License</span><strong>MIT</strong></div>
             </div>
         </div>
     </section>
@@ -641,8 +509,9 @@
                 <a href="https://github.com/Karimkusin88/-x1-greenpulse" target="_blank">GitHub</a>
                 <a href="https://x.com/karimkusin" target="_blank">X (Twitter)</a>
                 <a href="https://maculatus-scan.x1eco.com" target="_blank">Block Explorer</a>
+                <a href="https://ecodex.one" target="_blank">EcoDEX</a>
             </div>
-            <p class="footer-copy">© 2026 X1 GreenPulse by KarimKusin. Built on X1 EcoChain.</p>
+            <p class="footer-copy">© 2026 X1 GreenPulse by KarimKusin. Built on X1 EcoChain. All rights reserved.</p>
         </div>
     </footer>
 
@@ -671,7 +540,7 @@
                     <div class="wallet-icon">🔗</div>
                     <div class="wallet-details">
                         <span class="wallet-name">WalletConnect</span>
-                        <span class="wallet-desc">Scan QR code with your mobile wallet</span>
+                        <span class="wallet-desc">Scan QR code with mobile wallet</span>
                     </div>
                     <span class="coming-soon-badge">Soon</span>
                 </button>
