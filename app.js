@@ -11,7 +11,7 @@
 // X1 EcoChain Network Config
 // ========================================
 const X1_CONFIG = {
-    chainId: '0x2A2A',
+    chainId: '0x2A1A',
     chainIdDecimal: 10778,
     chainName: 'X1 EcoChain Testnet (Maculatus)',
     rpcUrl: 'https://maculatus-rpc.x1eco.com',
@@ -82,16 +82,22 @@ async function switchToX1Network() {
         });
     } catch (e) {
         if (e.code === 4902) {
-            await window.ethereum.request({
-                method: 'wallet_addEthereumChain',
-                params: [{
-                    chainId: X1_CONFIG.chainId,
-                    chainName: X1_CONFIG.chainName,
-                    nativeCurrency: X1_CONFIG.currency,
-                    rpcUrls: [X1_CONFIG.rpcUrl],
-                    blockExplorerUrls: [X1_CONFIG.explorerUrl]
-                }]
-            });
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [{
+                        chainId: X1_CONFIG.chainId,
+                        chainName: X1_CONFIG.chainName,
+                        nativeCurrency: X1_CONFIG.currency,
+                        rpcUrls: [X1_CONFIG.rpcUrl],
+                        blockExplorerUrls: [X1_CONFIG.explorerUrl]
+                    }]
+                });
+            } catch (addError) {
+                console.log('Network may already exist, continuing...', addError);
+            }
+        } else {
+            console.log('Switch network error (may already be on correct chain):', e.message);
         }
     }
 }
