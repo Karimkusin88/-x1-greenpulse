@@ -1462,3 +1462,385 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(34, 197, 94, 0.5);
 }
+
+/* ========================================
+   Wallet Connection Modal
+   ======================================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    width: 90%;
+    max-width: 420px;
+    position: relative;
+    transform: translateY(20px) scale(0.95);
+    transition: all 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0) scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.modal-header h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.modal-header p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.network-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.15);
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+}
+
+.network-badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--green-400);
+}
+
+.chain-id {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: 'Space Grotesk', monospace;
+}
+
+.wallet-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+}
+
+.wallet-option:hover {
+    background: rgba(34, 197, 94, 0.08);
+    border-color: rgba(34, 197, 94, 0.3);
+    transform: translateX(4px);
+}
+
+.wallet-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.wallet-details {
+    flex: 1;
+    text-align: left;
+}
+
+.wallet-name {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+}
+
+.wallet-desc {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.coming-soon-badge {
+    padding: 3px 10px;
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--purple-400);
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.modal-footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.modal-footer p {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* ========================================
+   Connected Wallet Badge
+   ======================================== */
+.btn-connect.connected {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    padding: 6px 8px;
+}
+
+.wallet-connected-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wallet-balance {
+    color: var(--green-400);
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.wallet-address-badge {
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-full);
+    font-family: 'Space Grotesk', monospace;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Spinner */
+.spin {
+    animation: spinAnim 1s linear infinite;
+}
+
+@keyframes spinAnim {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   Transaction History
+   ======================================== */
+.tx-list-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.tx-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.tx-item:last-child {
+    border-bottom: none;
+}
+
+.tx-item:hover {
+    background: rgba(255, 255, 255, 0.02);
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-left: -8px;
+    margin-right: -8px;
+    border-radius: var(--radius-sm);
+}
+
+.tx-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.tx-icon.incoming {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--green-400);
+}
+
+.tx-icon.outgoing {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.tx-details {
+    flex: 1;
+}
+
+.tx-type {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.tx-addr {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: 'Space Grotesk', monospace;
+}
+
+.tx-time {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.tx-amount {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+.tx-amount.incoming { color: var(--green-400); }
+.tx-amount.outgoing { color: #ef4444; }
+
+.tx-explorer-link {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.tx-explorer-link:hover {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--green-400);
+}
+
+.no-tx {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px 20px;
+    font-size: 0.9rem;
+}
+
+/* ========================================
+   Notifications
+   ======================================== */
+.notification {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 3000;
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    animation: slideInRight 0.3s ease;
+    max-width: 400px;
+    backdrop-filter: blur(20px);
+}
+
+.notification.info {
+    background: rgba(6, 182, 212, 0.15);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    color: var(--cyan-400);
+}
+
+.notification.success {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: var(--green-400);
+}
+
+.notification.error {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
+
+.notification button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 0.7;
+    transition: var(--transition);
+}
+
+.notification button:hover {
+    opacity: 1;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}

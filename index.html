@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <!-- Animated Background -->
@@ -200,7 +201,7 @@
                 </div>
             </div>
 
-            <!-- Network Stats Cards -->
+            <!-- Network Stats Cards (REAL from Blockscout API) -->
             <div class="card stat-card glow-green">
                 <div class="stat-icon green">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -208,11 +209,10 @@
                     </svg>
                 </div>
                 <div class="stat-info">
-                    <span class="stat-number" data-count="38.7">0</span>
-                    <span class="stat-unit-sm">tCO₂</span>
+                    <span class="stat-number" data-stat="total-tx">84.5M</span>
                 </div>
-                <span class="stat-title">Carbon Offset Today</span>
-                <span class="stat-change positive">+12.4% vs yesterday</span>
+                <span class="stat-title">Total Transactions</span>
+                <span class="stat-change positive">🔴 Live from Explorer</span>
             </div>
 
             <div class="card stat-card glow-cyan">
@@ -223,11 +223,11 @@
                     </svg>
                 </div>
                 <div class="stat-info">
-                    <span class="stat-number" data-count="847">0</span>
-                    <span class="stat-unit-sm">ms</span>
+                    <span class="stat-number" data-stat="block-time">3.0</span>
+                    <span class="stat-unit-sm">s</span>
                 </div>
                 <span class="stat-title">Avg Block Time</span>
-                <span class="stat-change positive">-3.2% faster</span>
+                <span class="stat-change positive">🔴 Live from Explorer</span>
             </div>
 
             <div class="card stat-card glow-purple">
@@ -237,11 +237,10 @@
                     </svg>
                 </div>
                 <div class="stat-info">
-                    <span class="stat-number" data-count="1.2">0</span>
-                    <span class="stat-unit-sm">M</span>
+                    <span class="stat-number" data-stat="tx-today">554K</span>
                 </div>
                 <span class="stat-title">Transactions Today</span>
-                <span class="stat-change positive">+8.7% growth</span>
+                <span class="stat-change positive">🔴 Live from Explorer</span>
             </div>
 
             <!-- Live Energy Chart -->
@@ -603,6 +602,20 @@
         </div>
     </section>
 
+    <!-- Transaction History Section -->
+    <section class="section" id="tx-history">
+        <div class="section-header">
+            <div class="section-badge">📋 Transaction History</div>
+            <h2 class="section-title">Your <span class="gradient-text">On-Chain Activity</span></h2>
+            <p class="section-desc">Real transactions from X1 EcoChain Maculatus Testnet explorer.</p>
+        </div>
+        <div class="tx-list-container card">
+            <div id="txHistory">
+                <p class="no-tx">Connect your wallet to view real transaction history</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
@@ -632,6 +645,42 @@
             <p class="footer-copy">© 2026 X1 GreenPulse by KarimKusin. Built on X1 EcoChain.</p>
         </div>
     </footer>
+
+    <!-- Wallet Connection Modal -->
+    <div class="modal-overlay" id="walletModal">
+        <div class="modal-content">
+            <button class="modal-close">✕</button>
+            <div class="modal-header">
+                <h3>Connect Your Wallet</h3>
+                <p>Choose a wallet to connect to X1 GreenPulse</p>
+            </div>
+            <div class="modal-body">
+                <div class="network-info">
+                    <span class="network-badge">🌿 X1 EcoChain Maculatus Testnet</span>
+                    <span class="chain-id">Chain ID: 204005</span>
+                </div>
+                <button class="wallet-option wallet-option-metamask">
+                    <div class="wallet-icon">🦊</div>
+                    <div class="wallet-details">
+                        <span class="wallet-name">MetaMask</span>
+                        <span class="wallet-desc">Connect using MetaMask browser extension</span>
+                    </div>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+                <button class="wallet-option wallet-option-walletconnect">
+                    <div class="wallet-icon">🔗</div>
+                    <div class="wallet-details">
+                        <span class="wallet-name">WalletConnect</span>
+                        <span class="wallet-desc">Scan QR code with your mobile wallet</span>
+                    </div>
+                    <span class="coming-soon-badge">Soon</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <p>By connecting, you agree to allow X1 GreenPulse to view your public wallet address.</p>
+            </div>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
