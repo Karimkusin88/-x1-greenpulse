@@ -59,7 +59,7 @@ x1-greenpulse/
 
 ```bash
 # Clone the repo
-git clone https://github.com/karimkusin/x1-greenpulse.git
+git clone https://github.com/Karimkusin88/-x1-greenpulse.git
 cd x1-greenpulse
 
 # Serve locally
@@ -110,6 +110,8 @@ Green Score = (Energy Efficiency × 0.40)
 | **Founder** | KarimKusin |
 | **Wallet** | `0x7172...888B` |
 | **Email** | karimkusin@gmail.com |
+| **GitHub** | [@Karimkusin88](https://github.com/Karimkusin88) |
+| **X (Twitter)** | [@karimkusin](https://x.com/karimkusin) |
 | **Network** | X1 EcoChain |
 
 ## 📄 License
@@ -124,6 +126,7 @@ MIT License — see [LICENSE](LICENSE) for details.
 - [Testnet / Airdrop](https://testnet.x1ecochain.com)
 - [Block Explorer](https://maculatus-scan.x1eco.com)
 - [Whitepaper](whitepaper.html)
+- [GitHub](https://github.com/Karimkusin88/-x1-greenpulse)
 
 ---
 
