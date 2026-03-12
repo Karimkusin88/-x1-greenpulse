@@ -11,10 +11,10 @@
 // X1 EcoChain Network Config
 // ========================================
 const X1_CONFIG = {
-    chainId: '0x31CE5',
-    chainIdDecimal: 204005,
+    chainId: '0x2A2A',
+    chainIdDecimal: 10778,
     chainName: 'X1 EcoChain Testnet (Maculatus)',
-    rpcUrl: 'https://x1-testnet.xen.network',
+    rpcUrl: 'https://maculatus-rpc.x1eco.com',
     explorerUrl: 'https://maculatus-scan.x1eco.com',
     explorerApi: 'https://maculatus-scan.x1eco.com/api/v2',
     currency: { name: 'X1 Testnet Coin', symbol: 'X1T', decimals: 18 },
