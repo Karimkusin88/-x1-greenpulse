@@ -290,10 +290,10 @@ async function dailyCheckIn() {
     btn.querySelector('.checkin-icon').textContent = '⏳';
 
     try {
-        // Send 0 X1T to self = real TX with minimal cost
+        // Send tiny X1T to self = real TX on-chain
         const tx = await walletState.signer.sendTransaction({
             to: walletState.address,
-            value: 0n
+            value: ethers.parseEther('0.0001')
         });
 
         btn.querySelector('.checkin-text').textContent = 'Confirming...';
