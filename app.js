@@ -18,8 +18,21 @@ const X1_CONFIG = {
     explorerUrl: 'https://maculatus-scan.x1eco.com',
     explorerApi: 'https://maculatus-scan.x1eco.com/api/v2',
     currency: { name: 'X1 Testnet Coin', symbol: 'X1T', decimals: 18 },
-    builderWallet: '0x71723715478b344164e992b49ae1fCEb6467888B'
+    builderWallet: '0x71723715478b344164e992b49ae1fCEb6467888B',
+    contracts: {
+        carbonCredit: '0xc3B95a6beb42B9c1889524126DB753fc2c494890',
+        greenScoreOracle: '0x582b54eb5Ec53D8bf7b11F4653E2D106a2e9C84f'
+    }
 };
+
+const CARBON_CREDIT_ABI = [
+    'function mint(address to, string uri, uint256 carbonOffsetTCO2, string category) returns (uint256)',
+    'function totalSupply() view returns (uint256)',
+    'function balanceOf(address) view returns (uint256)',
+    'function ownerOf(uint256) view returns (address)',
+    'function name() view returns (string)',
+    'function symbol() view returns (string)'
+];
 
 // ========================================
 // Global State
@@ -437,24 +450,30 @@ function updateFaucetAddress() {
 }
 
 // ========================================
-// Mint NFT (Real TX!)
+// Mint NFT (Real Smart Contract!)
 // ========================================
-document.querySelectorAll('.btn-mint').forEach(btn => {
+const NFT_CATEGORIES = [
+    { name: 'Amazon Reforestation', category: 'Forest', offset: 10, uri: 'https://x1-greenpulse.vercel.app/nft/amazon-reforestation' },
+    { name: 'Solar Farm Initiative', category: 'Solar', offset: 8, uri: 'https://x1-greenpulse.vercel.app/nft/solar-farm' },
+    { name: 'Wind Energy Credits', category: 'Wind', offset: 12, uri: 'https://x1-greenpulse.vercel.app/nft/wind-energy' },
+    { name: 'Ocean Conservation', category: 'Ocean', offset: 6, uri: 'https://x1-greenpulse.vercel.app/nft/ocean-conservation' }
+];
+
+document.querySelectorAll('.btn-mint').forEach((btn, index) => {
     btn.addEventListener('click', async function() {
         if (!walletState.connected) {
             showNotification('Connect wallet first!', 'error');
             showWalletModal();
             return;
         }
+        const nft = NFT_CATEGORIES[index] || NFT_CATEGORIES[0];
         const original = this.textContent;
         this.textContent = 'Preparing...';
         this.style.opacity = '0.7';
         this.disabled = true;
         try {
-            const tx = await walletState.signer.sendTransaction({
-                to: walletState.address,
-                value: ethers.parseEther('0.001')
-            });
+            const contract = new ethers.Contract(X1_CONFIG.contracts.carbonCredit, CARBON_CREDIT_ABI, walletState.signer);
+            const tx = await contract.mint(walletState.address, nft.uri, nft.offset, nft.category);
             this.textContent = 'Confirming...';
             await tx.wait();
             this.textContent = '✓ Minted!';
@@ -462,7 +481,7 @@ document.querySelectorAll('.btn-mint').forEach(btn => {
             this.style.color = '#34d399';
             this.style.border = '1px solid rgba(52, 211, 153, 0.3)';
             this.style.opacity = '1';
-            showNotification(`NFT Minted! TX: ${tx.hash.slice(0, 14)}...`, 'success');
+            showNotification(`🌿 ${nft.name} NFT Minted! (${nft.offset} tCO₂) TX: ${tx.hash.slice(0, 14)}...`, 'success');
             const balance = await walletState.provider.getBalance(walletState.address);
             walletState.balance = parseFloat(ethers.formatEther(balance));
             updateWalletUI();
@@ -472,7 +491,7 @@ document.querySelectorAll('.btn-mint').forEach(btn => {
                 this.style.color = '';
                 this.style.border = '';
                 this.disabled = false;
-            }, 3000);
+            }, 5000);
         } catch (error) {
             this.textContent = original;
             this.style.opacity = '1';
