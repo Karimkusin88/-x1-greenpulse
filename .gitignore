@@ -1,1 +1,5 @@
 .vercel
+node_modules
+compile.js
+package-lock.json
+package.json

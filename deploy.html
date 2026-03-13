@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy GreenPulse Contracts — X1 EcoChain</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f1923; color: #f8fafc; min-height: 100vh; padding: 40px 20px; }
+        .container { max-width: 700px; margin: 0 auto; }
+        h1 { font-size: 2rem; margin-bottom: 8px; }
+        h1 span { color: #34d399; }
+        .subtitle { color: #6b83a0; margin-bottom: 32px; }
+        .card { background: rgba(22,38,58,0.9); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 28px; margin-bottom: 20px; }
+        .card h3 { margin-bottom: 8px; font-size: 1.2rem; }
+        .card p { color: #a1b4cc; font-size: 0.9rem; margin-bottom: 16px; }
+        .btn { padding: 14px 28px; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; width: 100%; transition: all 0.3s; }
+        .btn-green { background: linear-gradient(135deg, #34d399, #22d3ee); color: #000; }
+        .btn-green:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(52,211,153,0.4); }
+        .btn-green:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        .status { margin-top: 12px; padding: 12px; border-radius: 8px; font-size: 0.85rem; display: none; word-break: break-all; }
+        .status.show { display: block; }
+        .status.success { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); color: #34d399; }
+        .status.error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; }
+        .status.info { background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.3); color: #22d3ee; }
+        a { color: #34d399; }
+        .result { margin-top: 16px; padding: 16px; background: rgba(52,211,153,0.05); border: 1px solid rgba(52,211,153,0.15); border-radius: 12px; display: none; }
+        .result.show { display: block; }
+        .result-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.85rem; }
+        .result-item:last-child { border: none; }
+        .result-item span:first-child { color: #6b83a0; }
+        .back-link { display: inline-block; margin-bottom: 24px; color: #34d399; text-decoration: none; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to GreenPulse</a>
+        <h1>🚀 Deploy <span>GreenPulse</span> Contracts</h1>
+        <p class="subtitle">Deploy smart contracts to X1 EcoChain Maculatus Testnet via MetaMask</p>
+
+        <div class="card">
+            <h3>1️⃣ GreenPulseCarbonCredit (ERC-721)</h3>
+            <p>Carbon Credit NFT contract — mint, track, and trade carbon offset certificates.</p>
+            <button class="btn btn-green" id="deployCarbonCredit" onclick="deployContract('GreenPulseCarbonCredit')">Deploy GreenPulseCarbonCredit</button>
+            <div class="status" id="status-GreenPulseCarbonCredit"></div>
+            <div class="result" id="result-GreenPulseCarbonCredit"></div>
+        </div>
+
+        <div class="card">
+            <h3>2️⃣ GreenScoreOracle</h3>
+            <p>Validator scoring contract — track energy, uptime, carbon, and network scores.</p>
+            <button class="btn btn-green" id="deployGreenScoreOracle" onclick="deployContract('GreenScoreOracle')">Deploy GreenScoreOracle</button>
+            <div class="status" id="status-GreenScoreOracle"></div>
+            <div class="result" id="result-GreenScoreOracle"></div>
+        </div>
+
+        <div class="card">
+            <h3>3️⃣ Mint First NFT (After Deploy)</h3>
+            <p>Mint an "Amazon Reforestation" Carbon Credit NFT to your wallet.</p>
+            <button class="btn btn-green" id="mintNft" onclick="mintFirstNFT()" disabled>Mint Carbon Credit NFT</button>
+            <div class="status" id="status-mint"></div>
+        </div>
+    </div>
+
+    <script>
+    const EXPLORER = 'https://maculatus-scan.x1eco.com';
+    const CHAIN_ID = '0x2A1A';
+    const RPC_URL = 'https://maculatus-rpc.x1eco.com';
+    let contracts = {};
+    let deployedAddresses = {};
+
+    // Load compiled contracts
+    fetch('contracts/compiled.json')
+        .then(r => r.json())
+        .then(data => { contracts = data; console.log('✅ Contracts loaded'); })
+        .catch(e => console.error('Failed to load contracts:', e));
+
+    function setStatus(id, message, type) {
+        const el = document.getElementById(`status-${id}`);
+        el.className = `status show ${type}`;
+        el.innerHTML = message;
+    }
+
+    function showResult(id, data) {
+        const el = document.getElementById(`result-${id}`);
+        el.className = 'result show';
+        el.innerHTML = data.map(([label, value]) => 
+            `<div class="result-item"><span>${label}</span><span>${value}</span></div>`
+        ).join('');
+    }
+
+    async function deployContract(name) {
+        if (!contracts[name]) { setStatus(name, '❌ Contract not loaded', 'error'); return; }
+        if (!window.ethereum) { setStatus(name, '❌ MetaMask not detected', 'error'); return; }
+
+        const btn = document.getElementById(name === 'GreenPulseCarbonCredit' ? 'deployCarbonCredit' : 'deployGreenScoreOracle');
+        btn.disabled = true;
+        btn.textContent = 'Connecting...';
+
+        try {
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            try {
+                await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: CHAIN_ID }] });
+            } catch(e) {
+                if (e.code === 4902) {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{ chainId: CHAIN_ID, chainName: 'X1 EcoChain Maculatus', nativeCurrency: { name: 'X1T', symbol: 'X1T', decimals: 18 }, rpcUrls: [RPC_URL], blockExplorerUrls: [EXPLORER] }]
+                    });
+                }
+            }
+
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner();
+
+            setStatus(name, '⏳ Deploying... (confirm in MetaMask)', 'info');
+            btn.textContent = 'Deploying...';
+
+            const factory = new ethers.ContractFactory(contracts[name].abi, contracts[name].bytecode, signer);
+            const contract = await factory.deploy();
+
+            setStatus(name, `⏳ Waiting for confirmation... TX: <a href="${EXPLORER}/tx/${contract.deploymentTransaction().hash}" target="_blank">${contract.deploymentTransaction().hash.slice(0,20)}...</a>`, 'info');
+            btn.textContent = 'Confirming...';
+
+            await contract.waitForDeployment();
+            const addr = await contract.getAddress();
+            deployedAddresses[name] = addr;
+
+            setStatus(name, `✅ Deployed successfully!`, 'success');
+            showResult(name, [
+                ['Contract', name],
+                ['Address', `<a href="${EXPLORER}/address/${addr}" target="_blank">${addr}</a>`],
+                ['TX', `<a href="${EXPLORER}/tx/${contract.deploymentTransaction().hash}" target="_blank">View on Explorer ↗</a>`],
+                ['Owner', await signer.getAddress()]
+            ]);
+            btn.textContent = '✅ Deployed!';
+
+            if (deployedAddresses['GreenPulseCarbonCredit']) {
+                document.getElementById('mintNft').disabled = false;
+            }
+        } catch (error) {
+            btn.disabled = false;
+            btn.textContent = `Deploy ${name}`;
+            if (error.code === 4001 || error.code === 'ACTION_REJECTED') {
+                setStatus(name, '❌ Transaction rejected', 'error');
+            } else {
+                setStatus(name, `❌ ${error.message}`, 'error');
+            }
+        }
+    }
+
+    async function mintFirstNFT() {
+        const addr = deployedAddresses['GreenPulseCarbonCredit'];
+        if (!addr) { setStatus('mint', '❌ Deploy CarbonCredit contract first', 'error'); return; }
+
+        const btn = document.getElementById('mintNft');
+        btn.disabled = true;
+        btn.textContent = 'Minting...';
+
+        try {
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner();
+            const myAddr = await signer.getAddress();
+            const contract = new ethers.Contract(addr, contracts['GreenPulseCarbonCredit'].abi, signer);
+
+            setStatus('mint', '⏳ Confirm mint in MetaMask...', 'info');
+            const tx = await contract.mint(myAddr, 'https://x1-greenpulse.vercel.app/nft/amazon-reforestation', 10, 'Forest');
+            setStatus('mint', `⏳ Confirming... TX: <a href="${EXPLORER}/tx/${tx.hash}" target="_blank">${tx.hash.slice(0,20)}...</a>`, 'info');
+            await tx.wait();
+            setStatus('mint', `✅ NFT Minted! Token #1 — Amazon Reforestation (10 tCO₂) <a href="${EXPLORER}/tx/${tx.hash}" target="_blank">View on Explorer ↗</a>`, 'success');
+            btn.textContent = '✅ Minted!';
+        } catch (error) {
+            btn.disabled = false;
+            btn.textContent = 'Mint Carbon Credit NFT';
+            setStatus('mint', `❌ ${error.message}`, 'error');
+        }
+    }
+    </script>
+</body>
+</html>
