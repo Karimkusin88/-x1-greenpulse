@@ -20,8 +20,8 @@ const X1_CONFIG = {
     currency: { name: 'X1 Testnet Coin', symbol: 'X1T', decimals: 18 },
     builderWallet: '0x71723715478b344164e992b49ae1fCEb6467888B',
     contracts: {
-        carbonCredit: '0xc3B95a6beb42B9c1889524126DB753fc2c494890',
-        greenScoreOracle: '0x582b54eb5Ec53D8bf7b11F4653E2D106a2e9C84f'
+        carbonCredit: '0xc3b95a6beb42b9c1889524126db753fc2c494890',
+        greenScoreOracle: '0x582b54eb5ec53d8bf7b11f4653e2d106a2e9c84f'
     }
 };
 
@@ -472,7 +472,7 @@ document.querySelectorAll('.btn-mint').forEach((btn, index) => {
         this.style.opacity = '0.7';
         this.disabled = true;
         try {
-            const contract = new ethers.Contract(X1_CONFIG.contracts.carbonCredit, CARBON_CREDIT_ABI, walletState.signer);
+            const contract = new ethers.Contract(ethers.getAddress(X1_CONFIG.contracts.carbonCredit), CARBON_CREDIT_ABI, walletState.signer);
             const tx = await contract.mint(walletState.address, nft.uri, nft.offset, nft.category);
             this.textContent = 'Confirming...';
             await tx.wait();
